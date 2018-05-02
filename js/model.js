@@ -1,13 +1,16 @@
+
 var pasos = [];
 var imagen = new Image();
-var activa = "#fff"; //casilla activada
-var bloqueada = "#00f"; //casilla en la que no se puede pasar
-var inactiva = "#999"; //casilla que se necesita activar
-var neutral = "#f00"; //casilla que se puede pasar pero no se puede activar
+
+const activa = "#fff"; //casilla activada
+const bloqueada = "#00f"; //casilla en la que no se puede pasar
+const inactiva = "#999"; //casilla que se necesita activar
+const neutral = "#f00"; //casilla que se puede pasar pero no se puede activar
+
 
 var tablero1 = [
 	[neutral,neutral,neutral,inactiva,neutral],
-	[neutral,neutral,neutral,neutral,neutral],
+	[neutral,bloqueada,neutral,neutral,neutral],
 	[neutral,neutral,neutral,neutral,neutral]
 ];
 
@@ -23,21 +26,32 @@ var tablero2 = [
 
 function addAvanzar(){
 	var option = document.createElement("option");
-    option.text = "Avanzar";
+	option.text = "Avanzar";
+	myGamePiece.Avanzar();
     lista.add(option);
     pasos.push(1);
 }
 
-function addGirar(){
+function addGirarH(){
 	var option = document.createElement("option");
-    option.text = "Girar";
+	option.text = "Girar Horario";
+	myGamePiece.GirarHorario();
     lista.add(option);
-    pasos.push(2);
+    pasos.push(1);
+}
+
+function addGirarA(){
+	var option = document.createElement("option");
+	option.text = "Girar";
+	myGamePiece.GirarAntihorario();
+    lista.add(option);
+    pasos.push(4);
 }
 
 function addAlumbrar(){
 	var option = document.createElement("option");
-    option.text = "Alumbrar";
+	option.text = "Alumbrar";
+	myGamePiece.Activar();
     lista.add(option);
     pasos.push(3);
 }
@@ -47,16 +61,19 @@ function addLimpiar(){
 	pasos = [];
 }
 
+
 function cargarnivel(){
 	avanzar.disabled = false;
-	girar.disabled = false;
+	girarH.disabled = false;
+	girarA.disabled = false;
 	alumbrar.disabled = false;
 	butonLimpiar.disabled = false;
 	newgame.disabled = true;
 	iniciar.disabled = false;
 	detener.disabled = false;
 	reiniciar.disabled = false;
-	tablero(1);
+	myGamePiece = new component(tablero1, 0, 0);
+	myGameArea.start();
 }
 
 function ejecutarcomandos(){
@@ -82,116 +99,141 @@ function addMovement(tipo){
 	console.log(tipo);
 }
 
-function tablero(tipo){
-
-	imagen.src = "img/derecha.png";
-
-	switch(tipo){
-		case 1:
-			var x = 5;
-			var y = 5;
-			var ctx = canvas.getContext("2d");
-			var bot = new Bot(tablero1);
-			for(var i = 0; i < 3; i++){
-				for(var j = 0; j<5; j++){
-		        	ctx.fillStyle=tablero1[i][j];
-					ctx.fillRect(x, y, 50, 40);
-					x = x + 60;
-	       	 	}
-	       	 	y = y + 50;
-	       	 	x = 5;
+var myGameArea = {
+    start : function() {
+        this.x = 5;
+		this.y = 5;
+        context = canvas.getContext("2d");
+		this.interval = setInterval(updateGameArea, 100);
+		for(var i = 0; i < 3; i++){
+			for(var j = 0; j<5; j++){
+				context.fillStyle=tablero1[i][j];
+				context.fillRect(this.x, this.y, 50, 40);
+				this.x += 60;
 			}
-			ctx.drawImage(imagen,5,10,50,20);
-			ctx.globalCompositeOperation = "destination-top";	
-	        break;
-	    case 2:
-	        var x = 5;
-			var y = 5;
-			var ctx = canvas.getContext("2d");
-			var bot = new Bot(tablero1);
-			for(var i = 0; i < 5; i++){
-				for(var j = 0; j<7; j++){
-		        	ctx.fillStyle="#FF0000";
-					ctx.fillRect(x, y, 30, 20);
-					x = x + 40;
-	       	 	}
-	       	 	y = y + 30;
-	       	 	x = 5;
+			this.y += 50;
+			this.x = 5;
+		}
+    },
+    clear : function() {
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		this.x = 5;
+		this.y = 5;
+		for(var i = 0; i < 3; i++){
+			for(var j = 0; j<5; j++){
+				context.fillStyle=tablero1[i][j];
+				context.fillRect(this.x, this.y, 50, 40);
+				this.x += 60;
 			}
-			ctx.drawImage(imagen,5,7,30,15);
-			ctx.globalCompositeOperation = "destination-top";
-	        break;
-	}
+			this.y += 50;
+			this.x = 5;
+		}
+    }
 }
 
-class Bot {
-	constructor(tabl,posx=0,posy=0,dir="oriente"){
-		this.posicionX = posx;
-		this.posicionY = posy;
-		this.direccion = dir;
-		this.tabl = tabl;
-	}
+function updateGameArea() {
+    myGameArea.clear();
+    myGamePiece.update();
+}
 
-	GirarHorario(direccion){
-		switch (direccion){
+function component(tbl, x, y) {
+	this.imagen = new Image();
+	this.imagen.src = "img/derecha.png";
+	this.direccion = "oriente";
+	this.tablero = tbl;
+	this.x = x;
+	this.y = y;
+	this.width = 50;
+	this.length = 20;
+    this.update = function() {
+        context.drawImage(this.imagen,this.x*60+5,this.y*50+5,this.width,this.length);
+    }
+    this.GirarHorario = function(){
+		switch (this.direccion){
             case "norte":
-                this.direccion = "oriente";
+				this.direccion = "oriente";
+				this.imagen.src ="img/derecha.png"
+				this.width = 50;
+				this.length = 20;
                 break;
             case "oriente":
 				this.direccion = "sur";
+				this.imagen.src ="img/abajo.png"
+				this.width = 20;
+				this.length = 30;
                 break;
             case "sur":
 				this.direccion = "occidente";
+				this.imagen.src ="img/izquierda.png"
+				this.width = 50;
+				this.length = 20;
                 break;
             case "occidente":
 				this.direccion = "norte";
+				this.imagen.src ="img/arriba.png"
+				this.width = 20;
+				this.length = 30;
                 break;
         }
 	}
-
-	GirarAntihorario(direccion){
-		switch (direccion){
+	this.GirarAntihorario = function(){
+		switch (this.direccion){
             case "norte":
 				this.direccion = "occidente";
+                this.imagen.src ="img/izquierda.png"
+				this.width = 50;
+				this.length = 20;
                 break;
             case "occidente":
 				this.direccion = "sur";
+                this.imagen.src ="img/abajo.png"
+				this.width = 20;
+				this.length = 30;
                 break;
             case "sur":
 				this.direccion = "oriente";
+                this.imagen.src ="img/derecha.png"
+				this.width = 50;
+				this.length = 20;
                 break;
             case "oriente":
 				this.direccion = "norte";
+                this.imagen.src ="img/arriba.png"
+				this.width = 20;
+				this.length = 30;
                 break;
         }
 	}
 
-	Avanzar (){
-        switch (direccion){
+	this.Avanzar = function(){
+        switch (this.direccion){
             case "norte":
-                this.posisionY = (this.Mirar(this.posisionX, this.posisionY-1) ? this.posisionY - 1: this.posisionX);
+                this.y = (this.Mirar(this.x, this.y-1) ? this.y - 1: this.y);
                 break;
             case "oriente":
-				this.posisionX = (this.Mirar(this.posisionX+1, this.posisionY) ? this.posisionX + 1 : this.posisionY);
+				this.x = (this.Mirar(this.x+1, this.y) ? this.x + 1 : this.x);
                 break;
             case "sur":
-				this.posisionY = (this.Mirar(this.posisionX, this.posisionY+1) ? this.posisionY + 1 : this.posisionY);
+				this.y = (this.Mirar(this.x, this.y+1) ? this.y + 1 : this.y);
                 break;
             case "occidente":
-				this.posisionX = (this.Mirar(this.posisionX-1, this.posisionY) ? this.posisionX - 1 : this.posisionX);
+				this.x = (this.Mirar(this.x-1, this.y) ? this.x - 1 : this.x);
                 break;
         }
 	}
 	
-	static Mirar(posisionX, posisionY){
-        try{
-            if(this.tablero[posisionY][posisionX] == bloqueada){
-                return false;
-            }
-        }catch (err){
-            return false;
-        }
-        return true;
-    }
+	this.Mirar = function(x, y){
+		try{
+		return (this.tablero[y][x] == neutral || this.tablero[y][x] == inactiva || 
+			this.tablero[y][x] == activa)?true:false;
+		}catch(err){
+			return false;
+		}
+	}
 
+	this.Activar = function(){
+		this.tablero[this.y][this.x] = (this.tablero[this.y][this.x] == inactiva)?activa:
+			this.tablero[this.y][this.x];
+	}
 }
+

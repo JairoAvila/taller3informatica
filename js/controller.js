@@ -1,6 +1,8 @@
+
 var lista;
 var avanzar;
-var girar; 
+var girarH; 
+var girarA; 
 var alumbrar; 
 var butonLimpiar;
 var newgame;
@@ -18,8 +20,10 @@ function inicializarBotones(){
 	canvas = document.getElementById("canvasTablero");
 	avanzar = document.getElementById("butonAvanzar");
 	avanzar.addEventListener("click", addAvanzar);
-	girar = document.getElementById("butonGirar");
-	girar.addEventListener("click", addGirar);
+	girarH = document.getElementById("butonGirarH");
+    girarH.addEventListener("click", addGirarH);
+    girarA = document.getElementById("butonGirarA");
+	girarA.addEventListener("click", addGirarA);
 	alumbrar = document.getElementById("butonAlumbrar");
 	alumbrar.addEventListener("click", addAlumbrar);
 	butonLimpiar = document.getElementById("butonLimpiar");
