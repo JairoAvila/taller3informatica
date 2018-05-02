@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Taller 3 Informatica</title>
+	<link rel="stylesheet" type="text/css" href="Styles/style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="js/controller.js"></script>
+	<script src="js/model.js"></script>
+</head>
+<body>
+	<div class="container">
+	  <div class="row">
+	    <div class="col-sm-8">
+	    	<p></p>
+	      <canvas id="canvasTablero"></canvas>
+	    </div>
+	    <div class="col-sm-4">
+	    	<div class="row">
+	    		<div class="col-md-12">
+	    			<br>
+	    			<center>
+		    			<div class="btn-group">
+							<button type="button" class="btn btn-primary" id="butonAvanzar" disabled="">Avanzar</button>
+						    <button type="button" class="btn btn-primary" id="butonGirar" disabled>Girar</button>
+						    <button type="button" class="btn btn-primary" id="butonAlumbrar" disabled>Alumbrar</button>
+						</div>
+					</center>
+			    </div>
+            	<div class="col-md-12">
+            		<br>
+            		<select multiple class="form-control" id="selectJugadas"></select>
+            	</div>
+            	<div class="col-md-12">
+            		<br>
+            		<center>
+	            		<div class="btn-group-vertical">
+								<button type="button" class="btn btn-primary" id="butonNewGame">Nuevo Juego</button>
+							    <button type="button" class="btn btn-primary" id="butonIniciar" disabled>Iniciar</button>
+							    <button type="button" class="btn btn-primary" id="butonDetener" disabled>Detener</button>
+							    <button type="button" class="btn btn-primary" id="butonReiniciar" disabled>Reiniciar</button>
+							    <button type="button" class="btn btn-primary" id="butonLimpiar" disabled>Limpiar</button>
+						</div>
+					</center>
+            	</div>
+	    	</div>
+	    </div>
+  </div>
+</div>
+</body>
+</html>
