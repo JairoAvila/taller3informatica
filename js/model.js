@@ -29,32 +29,28 @@ var tablero2 = [
 function addAvanzar(){
 	var option = document.createElement("option");
 	option.text = "Avanzar";
-	myGamePiece.Avanzar();
-    lista.add(option);
-    pasos.push(1);
+	lista.add(option);
+    pasos.push(0);
 }
 
 function addGirarH(){
 	var option = document.createElement("option");
 	option.text = "Girar Horario";
-	myGamePiece.GirarHorario();
-    lista.add(option);
+	lista.add(option);
     pasos.push(1);
 }
 
 function addGirarA(){
 	var option = document.createElement("option");
 	option.text = "Girar";
-	myGamePiece.GirarAntihorario();
-    lista.add(option);
-    pasos.push(4);
+	lista.add(option);
+    pasos.push(2);
 }
 
 function addAlumbrar(){
 	var option = document.createElement("option");
 	option.text = "Alumbrar";
-	myGamePiece.Activar();
-    lista.add(option);
+	lista.add(option);
     pasos.push(3);
 }
 
@@ -85,7 +81,22 @@ function ejecutarcomandos(){
 	}
 	else
 	{
-		console.log(pasos[0]);
+		for(var i = 0 ; i < pasos.length ; i++){
+			switch(pasos[i]){
+				case 0:
+				myGamePiece.Avanzar();
+				break;
+				case 1:
+				myGamePiece.GirarHorario();
+				break;
+				case 2:
+				myGamePiece.GirarAntihorario();
+				break;
+				case 3:
+				myGamePiece.Activar();
+				break;
+			}
+		}
 	}
 }
 
