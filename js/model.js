@@ -1,6 +1,8 @@
 
 var pasos = [];
 var imagen = new Image();
+var posX = 0;
+var posY =0;
 
 const activa = "#fff"; //casilla activada
 const bloqueada = "#00f"; //casilla en la que no se puede pasar
@@ -132,7 +134,8 @@ var myGameArea = {
 }
 
 function updateGameArea() {
-    myGameArea.clear();
+	myGameArea.clear();
+	myGamePiece.newPos();
     myGamePiece.update();
 }
 
@@ -141,13 +144,21 @@ function component(tbl, x, y) {
 	this.imagen.src = "img/derecha.png";
 	this.direccion = "oriente";
 	this.tablero = tbl;
+	this.i = 0;
 	this.x = x;
 	this.y = y;
 	this.width = 50;
 	this.length = 20;
-    this.update = function() {
-        context.drawImage(this.imagen,this.x*60+5,this.y*50+5,this.width,this.length);
-    }
+    this.update = function() {	
+		context.drawImage(this.imagen,posX+5,posY+5,this.width,this.length);
+	}
+	this.newPos = function(){
+		if(this.i <= 10){
+			posX = posX + (this.x*60-posX)/60*6*this.i;
+			posY = posY + (this.y*50-posY)/50*5*this.i;
+			this.i++;
+		}
+	}
     this.GirarHorario = function(){
 		switch (this.direccion){
             case "norte":
@@ -204,24 +215,26 @@ function component(tbl, x, y) {
                 break;
         }
 	}
-
 	this.Avanzar = function(){
         switch (this.direccion){
             case "norte":
-                this.y = (this.Mirar(this.x, this.y-1) ? this.y - 1: this.y);
+				this.y = (this.Mirar(this.x, this.y-1) ? this.y - 1: this.y);
+				this.i = 0;
                 break;
             case "oriente":
 				this.x = (this.Mirar(this.x+1, this.y) ? this.x + 1 : this.x);
+				this.i = 0;
                 break;
             case "sur":
 				this.y = (this.Mirar(this.x, this.y+1) ? this.y + 1 : this.y);
+				this.i = 0;
                 break;
             case "occidente":
 				this.x = (this.Mirar(this.x-1, this.y) ? this.x - 1 : this.x);
+				this.i = 0;
                 break;
-        }
+		}
 	}
-	
 	this.Mirar = function(x, y){
 		try{
 		return (this.tablero[y][x] == neutral || this.tablero[y][x] == inactiva || 
@@ -230,7 +243,6 @@ function component(tbl, x, y) {
 			return false;
 		}
 	}
-
 	this.Activar = function(){
 		this.tablero[this.y][this.x] = (this.tablero[this.y][this.x] == inactiva)?activa:
 			this.tablero[this.y][this.x];
