@@ -3,6 +3,9 @@ var pasos = [];
 var imagen = new Image();
 var posX = 0;
 var posY =0;
+var step =0;
+var run =false;
+var totalInactivas = 1;
 
 const activa = "#fff"; //casilla activada
 const bloqueada = "#00f"; //casilla en la que no se puede pasar
@@ -10,13 +13,13 @@ const inactiva = "#999"; //casilla que se necesita activar
 const neutral = "#f00"; //casilla que se puede pasar pero no se puede activar
 
 
-var tablero1 = [
+const tableroNv1 = [
 	[neutral,neutral,neutral,inactiva,neutral],
 	[neutral,bloqueada,neutral,neutral,neutral],
 	[neutral,neutral,neutral,neutral,neutral]
 ];
 
-var tablero2 = [
+const tableroNv2 = [
 	[neutral,neutral,neutral,neutral,neutral],
 	[neutral,neutral,neutral,neutral,neutral],
 	[neutral,neutral,neutral,neutral,neutral],
@@ -25,6 +28,8 @@ var tablero2 = [
 	[neutral,neutral,neutral,neutral,neutral],
 	[neutral,neutral,neutral,neutral,neutral],
 ];
+
+var tablero1 = tableroNv1;
 
 function addAvanzar(){
 	var option = document.createElement("option");
@@ -71,7 +76,7 @@ function cargarnivel(){
 	detener.disabled = false;
 	reiniciar.disabled = false;
 	myGamePiece = new component(tablero1, 0, 0);
-	myGameArea.start();
+	myGameArea.start(tablero1);
 }
 
 function ejecutarcomandos(){
@@ -81,46 +86,58 @@ function ejecutarcomandos(){
 	}
 	else
 	{
-		for(var i = 0 ; i < pasos.length ; i++){
-			switch(pasos[i]){
-				case 0:
-				myGamePiece.Avanzar();
-				break;
-				case 1:
-				myGamePiece.GirarHorario();
-				break;
-				case 2:
-				myGamePiece.GirarAntihorario();
-				break;
-				case 3:
-				myGamePiece.Activar();
-				break;
-			}
-		}
+		run = true;
 	}
 }
 
+function nextStep(){
+	if(step < pasos.length){
+		switch(pasos[step]){
+			case 0:
+			myGamePiece.Avanzar();
+			break;
+			case 1:
+			myGamePiece.GirarHorario();
+			break;
+			case 2:
+			myGamePiece.GirarAntihorario();
+			break;
+			case 3:
+			myGamePiece.Activar();
+			break;
+		}
+		step++;
+	}else{
+		run = false;
+	}
+	if(totalInactivas == 0){alert("Has ganado");}
+}
+
 function detenernivel(){
+	run=false;
 	console.log("oprimi avanzar");
 }
 
-function reiniciar(){
-	console.log("oprimi avanzar");
-}
-
-function addMovement(tipo){
-	console.log(tipo);
+function reiniciarnivel(){
+	run=false;
+	posX = 0;
+	posY = 0;
+	myGamePiece.reiniciarPos();
+	myGamePiece.direccion = "oriente";
+	step=0;
+	console.log("oprimi iniciar");
 }
 
 var myGameArea = {
-    start : function() {
+    start : function(tablero) {
         this.x = 5;
 		this.y = 5;
+		this.tablero = tablero;
         context = canvas.getContext("2d");
 		this.interval = setInterval(updateGameArea, 100);
 		for(var i = 0; i < 3; i++){
 			for(var j = 0; j<5; j++){
-				context.fillStyle=tablero1[i][j];
+				context.fillStyle=this.tablero[i][j];
 				context.fillRect(this.x, this.y, 50, 40);
 				this.x += 60;
 			}
@@ -134,7 +151,7 @@ var myGameArea = {
 		this.y = 5;
 		for(var i = 0; i < 3; i++){
 			for(var j = 0; j<5; j++){
-				context.fillStyle=tablero1[i][j];
+				context.fillStyle=this.tablero[i][j];
 				context.fillRect(this.x, this.y, 50, 40);
 				this.x += 60;
 			}
@@ -164,10 +181,21 @@ function component(tbl, x, y) {
 		context.drawImage(this.imagen,posX+5,posY+5,this.width,this.length);
 	}
 	this.newPos = function(){
-		if(this.i <= 10){
-			posX = posX + (this.x*60-posX)/60*6*this.i;
-			posY = posY + (this.y*50-posY)/50*5*this.i;
-			this.i++;
+		if(run){
+			if(this.i <= 10){
+				posX = posX + (this.x*60-posX)/60*6*this.i;
+				posY = posY + (this.y*50-posY)/50*5*this.i;
+				this.i++;
+			}else if(this.i == 11){
+				nextStep();
+			}
+			butonLimpiar.disabled = true;
+			iniciar.disabled = true;
+			detener.disabled = false;
+		}else{
+			butonLimpiar.disabled = false;
+			iniciar.disabled = false;
+			detener.disabled = true;
 		}
 	}
     this.GirarHorario = function(){
@@ -254,9 +282,23 @@ function component(tbl, x, y) {
 			return false;
 		}
 	}
-	this.Activar = function(){
-		this.tablero[this.y][this.x] = (this.tablero[this.y][this.x] == inactiva)?activa:
+	this.Activar = function(){ 
+		if (this.tablero[this.y][this.x] == inactiva){
+			this.tablero[this.y][this.x] = activa;
+			totalInactivas--;
+		}else{
 			this.tablero[this.y][this.x];
+		}
+	}
+	this.reiniciarPos = function(){
+		this.x = 0;
+		this.y = 0;
+		this.imagen.src = "img/derecha.png";
+		this.direccion = "oriente";
+		this.width = 50;
+		this.length = 20;
+		this.tablero = tableroNv1;
+		this.tablero1 = tableroNv1;
 	}
 }
 

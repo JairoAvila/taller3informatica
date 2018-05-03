@@ -35,5 +35,5 @@ function inicializarBotones(){
 	detener = document.getElementById("butonDetener");
 	detener.addEventListener("click", detenernivel);
 	reiniciar = document.getElementById("butonReiniciar");
-	reiniciar.addEventListener("click", reiniciar);
+	reiniciar.addEventListener("click", reiniciarnivel);
 }
