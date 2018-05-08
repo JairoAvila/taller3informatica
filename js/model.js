@@ -7,6 +7,10 @@ var step =0;
 var run =false;
 var totalInactivas = 2;
 
+var modo = 0;
+
+var flag = false;
+
 const celdInactivas = 2;
 const activa = "#fff"; //casilla activada
 const bloqueada = "#00f"; //casilla en la que no se puede pasar
@@ -14,7 +18,8 @@ const inactiva = "#999"; //casilla que se necesita activar
 const neutral = "#f00"; //casilla que se puede pasar pero no se puede activar
 
 
-const tableroNv1 = [
+
+var tablero = [
 	[neutral,bloqueada,bloqueada,bloqueada,inactiva],
 	[neutral,bloqueada,bloqueada,bloqueada,neutral],
 	[neutral,inactiva,neutral,neutral,neutral]
@@ -64,8 +69,8 @@ function cargarnivel(){
 	iniciar.disabled = false;
 	detener.disabled = false;
 	reiniciar.disabled = false;
-	myGamePiece = new component(tableroNv1, 0, 0);
-	myGameArea.start(tableroNv1);
+	myGamePiece = new component(tablero, 0, 0);
+	myGameArea.start(tablero);
 }
 
 function ejecutarcomandos(){
@@ -123,7 +128,7 @@ function reiniciarnivel(){
 
 
 function updateGameArea() {
-	myGameArea.clear();
+	//myGameArea.clear();
 	myGamePiece.newPos();
     myGamePiece.update();
 }
@@ -138,7 +143,8 @@ function component(tbl, x, y) {
 	this.y = y;
 	this.width = 50;
 	this.length = 20;
-    this.update = function() {	
+    this.update = function() {
+
 		context.drawImage(this.imagen,posX+5,posY+5,this.width,this.length);
 	}
 	this.newPos = function(){
@@ -269,34 +275,30 @@ function component(tbl, x, y) {
 
 var myGameArea = {
     start : function(tablero) {
-        this.x = 5;
-		this.y = 5;
-		this.tablero = tablero;
-        context = canvas.getContext("2d");
-		this.interval = setInterval(updateGameArea, 100);
-		for(var i = 0; i < 3; i++){
-			for(var j = 0; j<5; j++){
-				context.fillStyle=this.tablero[i][j];
-				context.fillRect(this.x, this.y, 50, 40);
-				this.x += 60;
-			}
-			this.y += 50;
-			this.x = 5;
-		}
+		flag = true;
     },
     clear : function() {
-		context.clearRect(0, 0, canvas.width, canvas.height);
-		this.x = 5;
-		this.y = 5;
-		for(var i = 0; i < 3; i++){
-			for(var j = 0; j<5; j++){
-				context.fillStyle=this.tablero[i][j];
-				context.fillRect(this.x, this.y, 50, 40);
-				this.x += 60;
-			}
-			this.y += 50;
-			this.x = 5;
-		}
+    	modo = 2;
     }
 }
 
+function draw() {
+ 	if(flag){
+ 		canvasGame.background(64);
+ 		x = 12;
+ 		y = 40;
+ 		for(var i = 0; i < 3; i++){
+ 			for(var j = 0; j < 5; j++)
+ 			{
+ 				var c = color(tablero[i][j]);
+ 				canvasGame.fill(c);
+ 				canvasGame.rect(x, y, 100, 100);
+ 				x = x + 130;
+ 			}
+ 			x = 12;
+ 			y = y + 200;
+		}
+
+		//updateGameArea();
+ 	}
+}

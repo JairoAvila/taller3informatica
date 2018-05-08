@@ -9,11 +9,14 @@ var newgame;
 var iniciar;
 var detener;
 var reiniciar;
-var canvas;
+var canvasGame;
 
-window.addEventListener('load', function() {
-  	inicializarBotones();
-})
+function setup(){
+    canvasGame = createCanvas(650, 600);
+    canvasGame.background(64);
+    canvasGame.parent('containerCanvas');
+    inicializarBotones();
+}
 
 function inicializarBotones(){
 	lista = document.getElementById("selectJugadas");
