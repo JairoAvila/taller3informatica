@@ -1,6 +1,6 @@
 
 var pasos = [];
-var imagen = new Image();
+var imagen;
 var posX = 0;
 var posY =0;
 var step =0;
@@ -134,8 +134,7 @@ function updateGameArea() {
 }
 
 function component(tbl, x, y) {
-	this.imagen = new Image();
-	this.imagen.src = "img/derecha.png";
+	this.imagen = loadImage("img/derecha.png");
 	this.direccion = "oriente";
 	this.tablero = tbl;
 	this.i = 0;
@@ -144,8 +143,8 @@ function component(tbl, x, y) {
 	this.width = 50;
 	this.length = 20;
     this.update = function() {
-
-		context.drawImage(this.imagen,posX+5,posY+5,this.width,this.length);
+    	modo = 1;
+		image(this.imagen, 60, 60);
 	}
 	this.newPos = function(){
 		if(run){
@@ -284,21 +283,21 @@ var myGameArea = {
 
 function draw() {
  	if(flag){
- 		canvasGame.background(64);
+ 		background(64);
  		x = 12;
  		y = 40;
  		for(var i = 0; i < 3; i++){
  			for(var j = 0; j < 5; j++)
  			{
  				var c = color(tablero[i][j]);
- 				canvasGame.fill(c);
- 				canvasGame.rect(x, y, 100, 100);
+ 				fill(c);
+ 				rect(x, y, 100, 100);
  				x = x + 130;
  			}
  			x = 12;
  			y = y + 200;
 		}
 
-		//updateGameArea();
+		updateGameArea();
  	}
 }
