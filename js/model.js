@@ -143,8 +143,7 @@ function component(tbl, x, y) {
 	this.width = 50;
 	this.length = 20;
     this.update = function() {
-    	modo = 1;
-		image(this.imagen, 60, 60);
+		image(this.imagen, posX+5,posY+60);
 	}
 	this.newPos = function(){
 		if(run){
@@ -168,25 +167,25 @@ function component(tbl, x, y) {
 		switch (this.direccion){
             case "norte":
 				this.direccion = "oriente";
-				this.imagen.src ="img/derecha.png"
+				this.imagen = loadImage("img/derecha.png");
 				this.width = 50;
 				this.length = 20;
                 break;
             case "oriente":
 				this.direccion = "sur";
-				this.imagen.src ="img/abajo.png"
+				this.imagen = loadImage("img/abajo.png");
 				this.width = 20;
 				this.length = 30;
                 break;
             case "sur":
 				this.direccion = "occidente";
-				this.imagen.src ="img/izquierda.png"
+				this.imagen = loadImage("img/izquierda.png");
 				this.width = 50;
 				this.length = 20;
                 break;
             case "occidente":
 				this.direccion = "norte";
-				this.imagen.src ="img/arriba.png"
+				this.imagen = loadImage("img/arriba.png");
 				this.width = 20;
 				this.length = 30;
                 break;
@@ -196,25 +195,25 @@ function component(tbl, x, y) {
 		switch (this.direccion){
             case "norte":
 				this.direccion = "occidente";
-                this.imagen.src ="img/izquierda.png"
+                this.imagen = loadImage("img/izquierda.png");
 				this.width = 50;
 				this.length = 20;
                 break;
             case "occidente":
 				this.direccion = "sur";
-                this.imagen.src ="img/abajo.png"
+                this.imagen= loadImage("img/abajo.png");
 				this.width = 20;
 				this.length = 30;
                 break;
             case "sur":
 				this.direccion = "oriente";
-                this.imagen.src ="img/derecha.png"
+                this.imagen = loadImage("img/derecha.png");
 				this.width = 50;
 				this.length = 20;
                 break;
             case "oriente":
 				this.direccion = "norte";
-                this.imagen.src ="img/arriba.png"
+                this.imagen = loadImage("img/arriba.png");
 				this.width = 20;
 				this.length = 30;
                 break;
