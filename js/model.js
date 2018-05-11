@@ -19,8 +19,14 @@ const neutral = "#f00"; //casilla que se puede pasar pero no se puede activar
 
 
 
-var tablero = [
+/*var tablero = [
 	[neutral,bloqueada,bloqueada,bloqueada,inactiva],
+	[neutral,bloqueada,bloqueada,bloqueada,neutral],
+	[neutral,inactiva,neutral,neutral,neutral]
+];*/
+
+var tablero = [
+	[neutral,neutral,neutral,neutral,inactiva],
 	[neutral,bloqueada,bloqueada,bloqueada,neutral],
 	[neutral,inactiva,neutral,neutral,neutral]
 ];
@@ -143,13 +149,13 @@ function component(tbl, x, y) {
 	this.width = 50;
 	this.length = 20;
     this.update = function() {
-		image(this.imagen, posX+5,posY+60);
+		image(this.imagen, posX+20,posY+45);
 	}
 	this.newPos = function(){
 		if(run){
 			if(this.i <= 10){
-				posX = posX + (this.x*60-posX)/60*6*this.i;
-				posY = posY + (this.y*50-posY)/50*5*this.i;
+				posX = posX + (this.x*120-posX)/120*20*this.i;
+				posY = posY + (this.y*100-posY)/100*50*this.i;
 				this.i++;
 			}else if(this.i == 11){
 				nextStep();
@@ -258,7 +264,7 @@ function component(tbl, x, y) {
 	this.reiniciarPos = function(){
 		this.x = 0;
 		this.y = 0;
-		this.imagen.src = "img/derecha.png";
+		this.imagen = loadImage("img/derecha.png");
 		this.direccion = "oriente";
 		this.width = 50;
 		this.length = 20;
@@ -283,18 +289,18 @@ var myGameArea = {
 function draw() {
  	if(flag){
  		background(64);
- 		x = 12;
- 		y = 40;
+ 		x = 20;
+ 		y = 20;
  		for(var i = 0; i < 3; i++){
  			for(var j = 0; j < 5; j++)
  			{
  				var c = color(tablero[i][j]);
  				fill(c);
  				rect(x, y, 100, 100);
- 				x = x + 130;
+ 				x = x + 120;
  			}
- 			x = 12;
- 			y = y + 200;
+ 			x = 20;
+ 			y = y + 120;
 		}
 
 		updateGameArea();

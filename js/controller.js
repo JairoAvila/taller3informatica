@@ -12,7 +12,7 @@ var reiniciar;
 var canvasGame;
 
 function setup(){
-    canvasGame = createCanvas(650, 600);
+    canvasGame = createCanvas(620, 380);
     canvasGame.background(64);
     canvasGame.parent('containerCanvas');
     inicializarBotones();
